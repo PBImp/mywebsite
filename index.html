@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pisturge</title>
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 3rem;
+      background: linear-gradient(135deg, #b28b84, #acbea3);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: #2e2320;
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    p {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      max-width: 60ch;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .cta {
+      display: inline-block;
+      padding: 0.75rem 1.75rem;
+      background: #2e2320;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: 2px solid #2e2320;
+      border-radius: 999px;
+      transition: opacity 0.15s ease;
+      cursor: pointer;
+    }
+
+    .cta:hover {
+      opacity: 0.85;
+    }
+
+    .cta.outline {
+      background: transparent;
+      color: #2e2320;
+    }
+
+    .browse-row {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .auth-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .auth-row .greeting {
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <h1>Games. Just Games. </h1>
+  <p>Play many free games — no sign-up, no money, just download and play.</p>
+
+  <div class="auth-row" id="auth-row"></div>
+
+  <div class="browse-row">
+    <a class="cta" href="games.html">Browse Games</a>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="supabase-client.js"></script>
+  <script>
+    const authRow = document.getElementById('auth-row');
+
+    async function renderAuth() {
+      const { data: { session } } = await sb.auth.getSession();
+      authRow.innerHTML = '';
+
+      if (session) {
+        const name = session.user.user_metadata?.full_name || session.user.email;
+
+        const greeting = document.createElement('span');
+        greeting.className = 'greeting';
+        greeting.textContent = `Hi, ${name}`;
+
+        const logoutBtn = document.createElement('button');
+        logoutBtn.type = 'button';
+        logoutBtn.className = 'cta outline';
+        logoutBtn.textContent = 'Log Out';
+        logoutBtn.addEventListener('click', async () => {
+          await sb.auth.signOut();
+          renderAuth();
+        });
+
+        authRow.append(greeting, logoutBtn);
+      } else {
+        const loginLink = document.createElement('a');
+        loginLink.className = 'cta outline';
+        loginLink.href = 'login.html';
+        loginLink.textContent = 'Log In';
+
+        const signupLink = document.createElement('a');
+        signupLink.className = 'cta';
+        signupLink.href = 'signup.html';
+        signupLink.textContent = 'Sign Up';
+
+        authRow.append(loginLink, signupLink);
+      }
+    }
+
+    renderAuth();
+  </script>
+</body>
+</html>

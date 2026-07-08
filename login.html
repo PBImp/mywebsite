@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In - Pisturge</title>
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: 3rem 1.5rem;
+      background: linear-gradient(135deg, #b28b84, #acbea3);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      color: #2e2320;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      margin: 0 0 1.5rem;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin: 1rem 0 0.35rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.65rem 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 0.75rem;
+      background: #2e2320;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+
+    button:hover {
+      opacity: 0.85;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .message {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      text-align: center;
+      min-height: 1.2em;
+    }
+
+    .message.error {
+      color: #b3261e;
+    }
+
+    .switch {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .switch a {
+      color: #2e2320;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Log in</h1>
+    <form id="login-form">
+      <label for="email">Email</label>
+      <input type="email" id="email" required autocomplete="email" />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" required autocomplete="current-password" />
+
+      <button type="submit" id="submit-btn">Log In</button>
+
+      <p class="message" id="message"></p>
+    </form>
+    <p class="switch">Don't have an account? <a href="signup.html">Sign up</a></p>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <script src="supabase-client.js"></script>
+  <script>
+    const form = document.getElementById('login-form');
+    const messageEl = document.getElementById('message');
+    const submitBtn = document.getElementById('submit-btn');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      messageEl.textContent = '';
+      messageEl.className = 'message';
+      submitBtn.disabled = true;
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+
+      submitBtn.disabled = false;
+
+      if (error) {
+        messageEl.textContent = error.message;
+        messageEl.className = 'message error';
+        return;
+      }
+
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+const SUPABASE_URL = 'https://rhgilwejnitiqsuyavah.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJoZ2lsd2Vqbml0aXFzdXlhdmFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1MzgyMjksImV4cCI6MjA5OTExNDIyOX0.KqDFGOEs5dSfN-vfXHftwy8ftG1KO9Tlk8n7PIGl-AI';
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
